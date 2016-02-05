@@ -4,7 +4,6 @@
 
 # Home page
 GET           /                               controllers.Application.index
-GET           /api/addresscheck               address.controllers.AddressController.getAddress(postalCode: String, houseNumber: Int)
 GET           /api/persons                    person.controllers.PersonController.persons()
 GET           /api/persons/:id                person.controllers.PersonController.get(id: Long)
 POST          /api/persons                    person.controllers.PersonController.saveNew
