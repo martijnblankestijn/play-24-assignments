@@ -1,10 +1,8 @@
 package person.repo
 
-import com.google.inject.ImplementedBy
 import person.domain.{Pagination, Person}
 
-@ImplementedBy(classOf[MemoryPersonRepository])
-trait SyncPersonRepository {
+trait PersonRepository {
   def getAll: Seq[Person]
 
   def get(id: Long): Option[Person]
@@ -19,10 +17,9 @@ trait SyncPersonRepository {
 }
 
 
-class MemoryPersonRepository extends SyncPersonRepository {
-  var persons = DefaultData.availablePersons
-  var counter = persons.size
-
+object MemoryPersonRepository extends PersonRepository {
+  var persons = DefaultData.availablePersons.zipWithIndex.map { case (person, i) => person.copy(id = i)}
+  var counter = persons.length
 
   override def getAll = persons
 
@@ -40,6 +37,7 @@ class MemoryPersonRepository extends SyncPersonRepository {
       ()
     }).getOrElse(throw new IllegalArgumentException(s"No person with id ${person.id} found."))
   }
+
 
   override def get(id: Long) = persons.find(_.id == id)
 

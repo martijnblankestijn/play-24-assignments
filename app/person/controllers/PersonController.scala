@@ -1,18 +1,16 @@
 package person.controllers
 
-import javax.inject.Inject
-
 import person.controllers.PersonJsonProtocol._
 import person.domain.Person
-import person.repo.SyncPersonRepository
+import person.repo.MemoryPersonRepository
 import play.api.http.HeaderNames
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
 import play.api.mvc.{Action, BodyParsers, Controller}
 
 
-class PersonController @Inject()(personRepo: SyncPersonRepository) extends Controller {
-
+class PersonController extends Controller {
+  val personRepo = MemoryPersonRepository
 
   def persons() = Action {
     Ok(toJson(personRepo.getAll))
