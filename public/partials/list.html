@@ -1,0 +1,23 @@
+<div class="table-full">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover" data-sort="table" ts-wrapper>
+            <thead>
+            <tr>
+                <th ts-criteria="firstName">First name</th>
+                <th ts-criteria="postalCode">Postal Code</th>
+                <th ts-criteria="houseNumber">House no</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="person in vm.persons" ts-repeat>
+                <td>{{person.firstName}}</td>
+                <td>{{person.postalCode}}</td>
+                <td>{{person.houseNumber}}</td>
+                <td><a ng-href="#/edit/{{person.id}}">Edit</a></td>
+                <td><a ng-href="#/details/{{person.id}}">Details</a></td>
+                <td><a href ng-click="vm.delete(person.id)">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="table-full">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>First name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="person in vm.persons">
+                <td><a ng-href="#/details/{{person.id}}">{{person.firstName}}</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="text-center">
+        <bgf-pagination
+                template-url="/assets/partials/pagination-tpl.html"
+                collection="vm.persons"
+                url="'/api/persons'"
+                per-page="5"
+                auto-presets="false"
+                reload-page="vm.reloadPage"
+        >
+        </bgf-pagination>
+    </div>
+</div>

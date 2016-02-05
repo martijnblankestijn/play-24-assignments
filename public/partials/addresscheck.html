@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-xs-12 col-md-10">
+        <form name="addressForm" ng-submit="vm.check()">
+            <fieldset class="fieldset-legend">
+                <legend>Address Check</legend>
+                <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" class="form-control" id="postalCode" placeholder="Your postal code"
+                           ng-model="vm.postalCode" maxlength="6"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="houseNumber">Housenumber</label>
+                    <input type="number" class="form-control" id="houseNumber" placeholder="Your house number"
+                           ng-model="vm.houseNumber"  min="1" max="99999"
+                           required>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn  btn-primary-outline"><span class="icon icon-save"></span> Check</button>
+        </form>
+    </div>
+</div>
+<div class="row"  ng-show="vm.addressFound()">
+    <form class="form-horizontal">
+        <fieldset>
+            <legend>Address details</legend>
+            <div class="control-group">
+                <label class="control-label">Street name</label>
+                <span class="input-xlarge uneditable-input">{{vm.address.streetName}}</span>
+            </div>
+            <div class="control-group">
+                <label class="control-label">House number</label>
+                <span class="input-xlarge uneditable-input">{{vm.address.houseNumber}}</span>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Postal Code</label>
+                <span class="input-xlarge uneditable-input">{{vm.address.postalCode}}</span>
+            </div>
+            <div class="control-group">
+                <label class="control-label">City</label>
+                <span class="input-xlarge uneditable-input">{{vm.address.city}}</span>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Municipality</label>
+                <span class="input-xlarge uneditable-input">{{vm.address.municipality}}</span>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Province</label>
+                <span class="input-xlarge uneditable-input">{{vm.address.province}}</span>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="row"  ng-hide="vm.addressFound()">
+    No address found.
+</div>

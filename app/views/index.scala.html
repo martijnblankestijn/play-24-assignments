@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Assignment REST with Play!</title>
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
+        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
+    </head>
+    <body>
+        <div class="container" ng-app="assignmentApp" >
+            <h1>Assignment REST app</h1>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a ng-href="#/list">List</a></li>
+                            <li><a ng-href="#/new">New</a></li>
+                            <li><a ng-href="#/addresscheck">Address check</a></li>
+                            <li><a ng-href="#/paginated">Extra: paginated list</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div>
+                <div flash-alert="success" active-class="in alert" class="fade">
+                    <strong class="alert-heading">Ok</strong>
+                    <span class="alert-message">{{flash.message}}</span>
+                </div>
+
+                <div flash-alert="error" active-class="in alert" class="fade">
+                    <strong class="alert-heading">Error</strong>
+                    <span class="alert-message">{{flash.message}}</span>
+                </div>
+            </div>
+
+            <div ng-view></div>
+        </div>
+        <script type='text/javascript' src='@routes.Assets.versioned("lib/angularjs/angular.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.versioned("lib/angularjs/angular-resource.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.versioned("lib/angularjs/angular-route.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.versioned("lib/angular-flash/dist/angular-flash.js")'></script>
+        <script type='text/javascript' src='@routes.Assets.versioned("lib/angular-paginate-anything/paginate-anything.js")'></script>
+
+        <script type='text/javascript' src='@routes.Assets.versioned("javascripts/assignmentApp.js")'></script>
+    </body>
+</html>

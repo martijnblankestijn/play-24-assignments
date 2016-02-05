@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-xs-12 col-md-10">
+        <form name="newPersonForm" ng-submit="vm.submit()">
+            <fieldset class="fieldset-legend">
+                <legend>Person</legend>
+                <div class="form-group">
+                    <label for="firstName">First name</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Your first name"
+                           ng-model="vm.person.firstName"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" class="form-control" id="postalCode" placeholder="Your postal code"
+                           ng-model="vm.person.postalCode"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="houseNumber">Housenumber</label>
+                    <input type="number" class="form-control" id="houseNumber" placeholder="Your house number"
+                           ng-model="vm.person.houseNumber"
+                           required>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn  btn-primary-outline"><span class="icon icon-save"></span> Save</button>
+        </form>
+    </div>
+</div>
