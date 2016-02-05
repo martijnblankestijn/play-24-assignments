@@ -1,74 +1,57 @@
 package person.controllers
 
-import java.net.{ConnectException, SocketException}
 import javax.inject.Inject
 
-import address.controllers.AddressJsonProtocol._
-import address.domain.Address
-import address.repo.AddressRepository
 import person.controllers.PersonJsonProtocol._
-import person.domain.{Pagination, Person}
-import person.repo.PersonRepository
-import play.api.Logger
+import person.domain.Person
+import person.repo.SyncPersonRepository
 import play.api.http.HeaderNames
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
-import play.api.mvc.{Action, BodyParsers, Controller, Result}
+import play.api.mvc.{Action, BodyParsers, Controller}
 
 
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import scala.concurrent.Future
+class PersonController @Inject()(personRepo: SyncPersonRepository) extends Controller {
 
 
-class PersonController @Inject()(personRepo: PersonRepository) extends Controller {
-
-
-  def persons() = Action.async { request =>
-    personRepo.getAll.map(p => Ok(toJson(p)))
+  def persons() = Action {
+    Ok(toJson(personRepo.getAll))
   }
 
-  def get(id: Long) = Action.async {
+  def get(id: Long) = Action {
     personRepo.get(id)
-      .map(
-        _.map(p => Ok(toJson(p)))
-          .getOrElse(NotFound))
+      .map(p => Ok(toJson(p)))
+      .getOrElse(NotFound)
   }
 
-  def saveNew() = Action.async(BodyParsers.parse.json) { request =>
+  def saveNew() = Action(BodyParsers.parse.json) { request =>
     val result: JsResult[Person] = request.body.validate[Person]
     result.fold(
-      errors => Future.successful(InternalServerError(JsError.toJson(errors))),
-      p => personRepo.saveNew(p)
-        .map(p => Created(toJson(p))
+      errors => InternalServerError(JsError.toJson(errors)),
+      p => {
+        val newPerson: Person = personRepo.saveNew(p)
+        Created(toJson(newPerson))
           .withHeaders(
-            HeaderNames.LOCATION -> person.controllers.routes.PersonController.get(p.id).url))
+            HeaderNames.LOCATION -> person.controllers.routes.PersonController.get(newPerson.id).url)
+      }
     )
   }
 
-  def update(id: Long) = Action.async(BodyParsers.parse.json) { request =>
+  def update(id: Long) = Action(BodyParsers.parse.json) { request =>
     val result: JsResult[Person] = request.body.validate[Person]
     result.fold(
-      errors => Future.successful(InternalServerError(JsError.toJson(errors))),
-      person => personRepo.update(person.copy(id = id)).map(_ => NoContent)
+      errors => InternalServerError(JsError.toJson(errors)),
+      person => {
+        personRepo.update(person.copy(id = id))
+        NoContent
+      }
     )
   }
 
-  def delete(id: Long) = Action.async {
+  def delete(id: Long) = Action {
     personRepo.delete(id)
-      .map(_ => NoContent)
+    NoContent
   }
-
-
-  private def createResponse(p: Person, o: Option[Address]): Result = {
-    val result = o.map(a => Json.obj(
-      ("person", toJson(p)),
-      ("address", toJson(a))
-    )).getOrElse(
-      Json.obj(("person", toJson(p)))
-    )
-    Ok(result)
-  }
-
 }
 
 
