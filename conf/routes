@@ -4,11 +4,6 @@
 
 # Home page
 GET           /                               controllers.Application.index
-GET           /api/persons                    person.controllers.PersonController.persons()
-GET           /api/persons/:id                person.controllers.PersonController.get(id: Long)
-POST          /api/persons                    person.controllers.PersonController.saveNew
-PUT           /api/persons/:id                person.controllers.PersonController.update(id: Long)
-DELETE        /api/persons/:id                person.controllers.PersonController.delete(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
