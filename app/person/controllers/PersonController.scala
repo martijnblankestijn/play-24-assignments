@@ -20,22 +20,11 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.Future
 
 
-class PersonController @Inject()(personRepo: PersonRepository, addressRepo: AddressRepository) extends Controller {
+class PersonController @Inject()(personRepo: PersonRepository) extends Controller {
 
 
   def persons() = Action.async { request =>
-    val range: Range = request.headers.get(RANGE).flatMap(Pagination(_)).getOrElse(Range(0, 99))
-    personRepo.getPaged(range)
-      .map(persons => {
-        val result = if (persons._2.hasNoContent) NoContent
-        else PartialContent(Json.toJson(persons._1))
-        result
-          .withHeaders(
-            CONTENT_RANGE -> persons._2.toContentRange,
-            "Range-Unit" -> "items")
-      })
-    // without the extra assignment.
-    // personRepo.getAll.map(p => Ok(toJson(p)))
+    personRepo.getAll.map(p => Ok(toJson(p)))
   }
 
   def get(id: Long) = Action.async {
@@ -43,28 +32,6 @@ class PersonController @Inject()(personRepo: PersonRepository, addressRepo: Addr
       .map(
         _.map(p => Ok(toJson(p)))
           .getOrElse(NotFound))
-  }
-
-  def getPersonDetails(id: Long) = Action.async {
-
-    def getAddress(p: Person): Future[Option[Address]] = {
-      addressRepo.get(p.postalCode, p.houseNumber)
-    }
-
-    personRepo.get(id)
-      .flatMap {
-        optionalPerson => optionalPerson.map {
-          person =>
-            addressRepo.get(person.postalCode, person.houseNumber)
-              .map(optionAddress => createResponse(person, optionAddress))
-              .recoverWith {
-                case e: ConnectException =>
-                  Logger.warn(s"Error connecting to endpoint")
-                  Future.successful(createResponse(person, None))
-              }
-        }
-          .getOrElse(Future.successful(NotFound))
-      }
   }
 
   def saveNew() = Action.async(BodyParsers.parse.json) { request =>
@@ -90,7 +57,6 @@ class PersonController @Inject()(personRepo: PersonRepository, addressRepo: Addr
     personRepo.delete(id)
       .map(_ => NoContent)
   }
-
 
 
   private def createResponse(p: Person, o: Option[Address]): Result = {
