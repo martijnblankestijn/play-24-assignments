@@ -70,7 +70,7 @@ class PersonController @Inject()(personRepo: PersonRepository, addressRepo: Addr
   def saveNew() = Action.async(BodyParsers.parse.json) { request =>
     val result: JsResult[Person] = request.body.validate[Person]
     result.fold(
-      errors => Future.successful(InternalServerError(JsError.toJson(errors))),
+      errors => Future.successful(BadRequest(JsError.toJson(errors))),
       p => personRepo.saveNew(p)
         .map(p => Created(toJson(p))
           .withHeaders(
@@ -81,7 +81,7 @@ class PersonController @Inject()(personRepo: PersonRepository, addressRepo: Addr
   def update(id: Long) = Action.async(BodyParsers.parse.json) { request =>
     val result: JsResult[Person] = request.body.validate[Person]
     result.fold(
-      errors => Future.successful(InternalServerError(JsError.toJson(errors))),
+      errors => Future.successful(BadRequest(JsError.toJson(errors))),
       person => personRepo.update(person.copy(id = id)).map(_ => NoContent)
     )
   }
