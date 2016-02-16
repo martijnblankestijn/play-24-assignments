@@ -46,5 +46,5 @@ class Persons(tag: Tag) extends Table[Person](tag, "person") {
   def postalCode = column[String]("postal_code")
   def houseNumber = column[Int]("house_no")
 
-  def * = (name, postalCode, houseNumber, id) <> ((Person.apply _).tupled, Person.unapply)
+  def * = (name, postalCode, houseNumber, id) <> (Person.tupled, Person.unapply)
 }
